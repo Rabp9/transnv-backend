@@ -2,6 +2,10 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Utility\Hash;
+use Cake\Network\Exception\UnauthorizedException;
+use Cake\Utility\Security;
+use Firebase\JWT\JWT;
 
 /**
  * Users Controller
@@ -12,107 +16,128 @@ use App\Controller\AppController;
  */
 class UsersController extends AppController
 {
-
+    public function initialize() {
+        parent::initialize();
+        $this->Auth->allow(['token']);
+    }
     /**
      * Index method
      *
-     * @return \Cake\Http\Response|void
+     * @return \Cake\Network\Response|null
      */
-    public function index()
-    {
-        $this->paginate = [
-            'contain' => ['Roles', 'Estados']
-        ];
-        $users = $this->paginate($this->Users);
-
-        $this->set(compact('users'));
-        $this->set('_serialize', ['users']);
+    public function index() {
+        
     }
-
+    
     /**
      * View method
      *
-     * @param string|null $id User id.
-     * @return \Cake\Http\Response|void
+     * @param string|null $id Personal id.
+     * @return \Cake\Network\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
-    {
+    public function view($id = null) {
         $user = $this->Users->get($id, [
-            'contain' => ['Roles', 'Estados']
+            'contain' => ['Personas']
         ]);
 
-        $this->set('user', $user);
-        $this->set('_serialize', ['user']);
-    }
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $user = $this->Users->newEntity();
-        if ($this->request->is('post')) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
-        }
-        $roles = $this->Users->Roles->find('list', ['limit' => 200]);
-        $estados = $this->Users->Estados->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'roles', 'estados'));
+        $this->set(compact('user'));
         $this->set('_serialize', ['user']);
     }
 
     /**
      * Edit method
      *
-     * @param string|null $id User id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
+     * @param string|null $id Personal id.
+     * @return \Cake\Network\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function edit($id = null)
     {
-        $user = $this->Users->get($id, [
+        $personal = $this->Personal->get($id, [
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
+            $personal = $this->Personal->patchEntity($personal, $this->request->getData());
+            if ($this->Personal->save($personal)) {
+                $this->Flash->success(__('The personal has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            $this->Flash->error(__('The personal could not be saved. Please, try again.'));
         }
-        $roles = $this->Users->Roles->find('list', ['limit' => 200]);
-        $estados = $this->Users->Estados->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'roles', 'estados'));
-        $this->set('_serialize', ['user']);
+        $this->set(compact('personal'));
+        $this->set('_serialize', ['personal']);
     }
 
     /**
      * Delete method
      *
-     * @param string|null $id User id.
-     * @return \Cake\Http\Response|null Redirects to index.
+     * @param string|null $id Personal id.
+     * @return \Cake\Network\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $user = $this->Users->get($id);
-        if ($this->Users->delete($user)) {
-            $this->Flash->success(__('The user has been deleted.'));
+        $personal = $this->Personal->get($id);
+        if ($this->Personal->delete($personal)) {
+            $this->Flash->success(__('The personal has been deleted.'));
         } else {
-            $this->Flash->error(__('The user could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The personal could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+    
+    /**
+     * Login method
+     *
+     * @param string|null $id User id.
+     * @return \Cake\Network\Response|null
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function login() {
+        $hasher = new DefaultPasswordHasher();
+        
+        $user = $this->Users->findByUsername($this->request->getData()['username'])->first();
+        
+        if (!empty($user)) {
+            if (!$hasher->check($this->request->getData()['password'], $user->password)) {
+                $user = null;
+                $message =  [
+                    'text' => __('El password no coincide'),
+                    'type' => 'success',
+                ];
+            } else {
+                $user = $this->Users->get($user->id, ['contain' => ['Roles.ControllerRoles.Controllers']]);
+            }
+        } else {
+            $message =  [
+                'text' => __('El nombre de usuario no existe'),
+                'type' => 'success',
+            ];
+        }
+        
+        $this->set(compact('user', 'message'));
+        $this->set('_serialize', ['user', 'message']);
+    }
+    
+    public function token() {
+        $user = $this->Auth->identify();
+        if (!$user) {
+            throw new UnauthorizedException('Invalid username or password');
+        }
+        $user = $this->Users->get($user['id'], ['contain' => ['Roles.ControllerRoles.Controllers']]);
+        $this->set([
+            'success' => true,
+            'user' => $user,
+            'token' => JWT::encode([
+                'sub' => $user['id'],
+                'exp' =>  time() + 604800
+            ],
+            Security::salt()),
+            '_serialize' => ['success', 'user', 'token']
+        ]);
     }
 }

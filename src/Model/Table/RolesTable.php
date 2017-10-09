@@ -28,17 +28,21 @@ class RolesTable extends Table
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config)
-    {
+    public function initialize(array $config) {
         parent::initialize($config);
 
         $this->setTable('roles');
-        $this->setDisplayField('id');
-        $this->setPrimaryKey(['id', 'estado_id']);
+        $this->setEntityClass('Rol');
+        $this->setDisplayField('descripcion');
+        $this->setPrimaryKey('id');
 
         $this->belongsTo('Estados', [
-            'foreignKey' => 'estado_id',
+            'foreignKey' => 'estados_id',
             'joinType' => 'INNER'
+        ]);
+        
+        $this->hasMany('ControllerRoles', [
+            'foreignKey' => 'rol_id'
         ]);
     }
 

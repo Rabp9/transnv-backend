@@ -4,7 +4,7 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Role Entity
+ * Rol Entity
  *
  * @property int $id
  * @property string $descripcion
@@ -12,7 +12,7 @@ use Cake\ORM\Entity;
  *
  * @property \App\Model\Entity\Estado $estado
  */
-class Role extends Entity
+class Rol extends Entity
 {
 
     /**
@@ -25,7 +25,6 @@ class Role extends Entity
      * @var array
      */
     protected $_accessible = [
-        'descripcion' => true,
-        'estado' => true
+        '*' => true
     ];
 }
