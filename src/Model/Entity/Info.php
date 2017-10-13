@@ -24,8 +24,6 @@ class Info extends Entity
      * @var array
      */
     protected $_accessible = [
-        'key' => true,
-        'value' => true,
-        'tipo' => true
+        '*' => true
     ];
 }

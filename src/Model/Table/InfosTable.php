@@ -26,40 +26,47 @@ class InfosTable extends Table
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config)
-    {
+    public function initialize(array $config) {
         parent::initialize($config);
 
-        $this->setTable('infos');
-        $this->setDisplayField('id');
-        $this->setPrimaryKey('id');
+        $this->table('infos');
+        $this->displayField('id');
+        $this->primaryKey('dato');
+        $this->addBehavior('Burzum/Imagine.Imagine');
     }
-
-    /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
-    public function validationDefault(Validator $validator)
-    {
-        $validator
-            ->integer('id')
-            ->allowEmpty('id', 'create');
-
-        $validator
-            ->scalar('key')
-            ->requirePresence('key', 'create')
-            ->notEmpty('key');
-
-        $validator
-            ->scalar('value')
-            ->allowEmpty('value');
-
-        $validator
-            ->scalar('tipo')
-            ->allowEmpty('tipo');
-
-        return $validator;
+    
+    public function afterSave($event, $entity, $options) {
+        /*$imageOperationsLarge = [
+            'thumbnail' => [
+                'height' => 800,
+                'width' => 800
+            ],
+        ];
+        $imageOperationsSmall = [
+            'thumbnail' => [
+                'height' => 400,
+                'width' => 400
+            ],
+        ];
+        
+        $path = WWW_ROOT . "img". DS . 'bg' . DS;
+        $bgs = array('bg_quienes_somos', 'bg_contactanos', 'bg_mision', 'bg_historia', 'bg_hero');
+                
+        if (in_array($entity->data, $bgs)) {
+            $ext = pathinfo($entity->value, PATHINFO_EXTENSION);
+            $filename_base = basename($entity->value, '.' . $ext);
+            if (file_exists($path . $entity->value)) {
+                $this->processImage($path . $entity->value,
+                    $path . $filename_base . '_large.' . $ext,
+                    [],
+                    $imageOperationsLarge
+                );
+                $this->processImage($path . $entity->value,
+                    $path . $filename_base . '_small.' . $ext,
+                    [],
+                    $imageOperationsSmall
+                );
+            }
+        }*/
     }
 }
