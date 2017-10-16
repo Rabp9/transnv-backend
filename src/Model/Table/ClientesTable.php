@@ -26,13 +26,13 @@ class ClientesTable extends Table
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config)
-    {
+    public function initialize(array $config) {
         parent::initialize($config);
 
         $this->setTable('clientes');
-        $this->setDisplayField('id');
+        $this->setDisplayField('razon_social');
         $this->setPrimaryKey('id');
+        $this->addBehavior('Burzum/Imagine.Imagine');
     }
 
     /**
@@ -41,22 +41,50 @@ class ClientesTable extends Table
      * @param \Cake\Validation\Validator $validator Validator instance.
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator)
-    {
+    public function validationDefault(Validator $validator) {
         $validator
             ->integer('id')
             ->allowEmpty('id', 'create');
 
         $validator
-            ->scalar('descripcion')
-            ->requirePresence('descripcion', 'create')
-            ->notEmpty('descripcion');
-
-        $validator
-            ->scalar('imagen')
-            ->requirePresence('imagen', 'create')
-            ->notEmpty('imagen');
+            ->scalar('razon_social')
+            ->requirePresence('razon_social', 'create')
+            ->notEmpty('razon_social');
 
         return $validator;
+    }
+    
+    public function afterSave($event, $entity, $options) {
+        $imageOperationsLarge = [
+            'thumbnail' => [
+                'height' => 800,
+                'width' => 800
+            ],
+        ];
+        $imageOperationsSmall = [
+            'thumbnail' => [
+                'height' => 400,
+                'width' => 400
+            ],
+        ];
+        
+        $path = WWW_ROOT . "img". DS . 'clientes' . DS;
+        
+        if ($entity->imagen) {
+            $ext = pathinfo($entity->imagen, PATHINFO_EXTENSION);
+            $filename_base = basename($entity->imagen, '.' . $ext);
+            if (file_exists($path . $entity->imagen)) {
+                $this->processImage($path . $entity->imagen,
+                    $path . $filename_base . '_large.' . $ext,
+                    [],
+                    $imageOperationsLarge
+                );
+                $this->processImage($path . $entity->imagen,
+                    $path . $filename_base . '_small.' . $ext,
+                    [],
+                    $imageOperationsSmall
+                );
+            }
+        }
     }
 }

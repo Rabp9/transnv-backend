@@ -7,7 +7,9 @@ use Cake\ORM\Entity;
  * Cliente Entity
  *
  * @property int $id
- * @property string $descripcion
+ * @property string $razon_social
+ * @property string $ciudad
+ * @property string $ruc
  * @property string $imagen
  */
 class Cliente extends Entity
@@ -23,7 +25,6 @@ class Cliente extends Entity
      * @var array
      */
     protected $_accessible = [
-        'descripcion' => true,
-        'imagen' => true
+        '*' => true
     ];
 }

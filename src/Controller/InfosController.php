@@ -33,8 +33,8 @@ class InfosController extends AppController
                 $message = 'La información no fue guardada correctamente';
             }
         }
-        $this->set(compact('info', 'message'));
-        $this->set('_serialize', ['info', 'message']);
+        $this->set(compact('info', 'message', 'code'));
+        $this->set('_serialize', ['info', 'message', 'code']);
     }
     
     /**

@@ -85,137 +85,7 @@ Router::scope('/', function (RouteBuilder $routes) {
  */
 Router::scope('/', function ($routes) {
     $routes->extensions(['json']);
-    $routes->resources('Productos', [
-        'map' => [
-            'getRandom/:num' => [
-                'action' => 'getRandom',
-                'method' => 'GET'
-            ],
-            'getAdmin' => [
-                'action' => 'getAdmin',
-                'method' => 'GET'
-            ],
-            'preview/' => [
-                'action' => 'preview',
-                'method' => 'POST'
-            ], 
-            'deleteImage' => [
-                'action' => 'deleteImage',
-                'method' => 'POST'
-            ],  
-            'previewBrochure/' => [
-                'action' => 'previewBrochure',
-                'method' => 'POST'
-            ], 
-            'previewPortada/' => [
-                'action' => 'previewPortada',
-                'method' => 'POST'
-            ], 
-            'remove' => [
-                'action' => 'remove',
-                'method' => 'POST'
-            ]
-        ]
-    ]);
-    //
     
-    $routes->resources('Servicios', [
-        'map' => [
-            'getRandom/:num' => [
-                'action' => 'getRandom',
-                'method' => 'GET'
-            ],
-            'getAdmin' => [
-                'action' => 'getAdmin',
-                'method' => 'GET'
-            ],
-            'preview/' => [
-                'action' => 'preview',
-                'method' => 'POST'
-            ], 
-            'deleteImage' => [
-                'action' => 'deleteImage',
-                'method' => 'POST'
-            ],  
-            'previewBrochure/' => [
-                'action' => 'previewBrochure',
-                'method' => 'POST'
-            ], 
-            'previewPortada/' => [
-                'action' => 'previewPortada',
-                'method' => 'POST'
-            ], 
-            'remove' => [
-                'action' => 'remove',
-                'method' => 'POST'
-            ]
-        ]
-    ]);
-    
-    $routes->resources('Proyectos', [
-        'map' => [
-            'getRandom/:num' => [
-                'action' => 'getRandom',
-                'method' => 'GET'
-            ],
-            'getAdmin' => [
-                'action' => 'getAdmin',
-                'method' => 'GET'
-            ],
-            'preview/' => [
-                'action' => 'preview',
-                'method' => 'POST'
-            ], 
-            'deleteImage' => [
-                'action' => 'deleteImage',
-                'method' => 'POST'
-            ],  
-            'previewBrochure/' => [
-                'action' => 'previewBrochure',
-                'method' => 'POST'
-            ], 
-            'previewPortada/' => [
-                'action' => 'previewPortada',
-                'method' => 'POST'
-            ], 
-            'remove' => [
-                'action' => 'remove',
-                'method' => 'POST'
-            ]
-        ]
-    ]);
-    $routes->resources('Albumes', [
-        'map' => [
-            'getAdmin' => [
-                'action' => 'getAdmin',
-                'method' => 'GET'
-            ],
-            'preview/' => [
-                'action' => 'preview',
-                'method' => 'POST'
-            ],
-            'deleteImage' => [
-                'action' => 'deleteImage',
-                'method' => 'POST'
-            ],
-            'remove' => [
-                'action' => 'remove',
-                'method' => 'POST'
-            ]
-        ]
-    ]);
-    $routes->resources('Politicas', [
-        'map' => [
-            'preview/' => [
-                'action' => 'preview',
-                'method' => 'POST'
-            ],
-            'getAdmin' => [
-                'action' => 'getAdmin',
-                'method' => 'GET'
-            ]
-        ]
-    ]);
     $routes->resources('Infos', [
         'map' => [
             'saveMany' => [
@@ -255,7 +125,11 @@ Router::scope('/', function ($routes) {
                 'action' => 'getCiudades',
                 'method' => 'GET'
             ],
-            'getRubros' => [
+            'previewImagen' => [
+                'action' => 'previewImagen',
+                'method' => 'POST'
+            ],
+/*            'getRubros' => [
                 'action' => 'getRubros',
                 'method' => 'GET'
             ],
@@ -266,65 +140,9 @@ Router::scope('/', function ($routes) {
             'getClientesByRubro/:rubro' => [
                 'action' => 'getClientesByRubro',
                 'method' => 'GET'
-            ]
+            ]*/
         ]
-    ]);
-    $routes->resources('Convocatorias', [
-        'map' => [
-            'preview/' => [
-                'action' => 'preview',
-                'method' => 'POST'
-            ],
-            'getAdmin' => [
-                'action' => 'getAdmin',
-                'method' => 'GET'
-            ]
-        ]
-    ]);
-    $routes->resources('TipoSugerencias', [
-        'map' => [
-            'sendMessage/' => [
-                'action' => 'sendMessage',
-                'method' => 'POST'
-            ],
-            'getAdmin' => [
-                'action' => 'getAdmin',
-                'method' => 'GET'
-            ],
-            'removeDetalle' => [
-                'action' => 'removeDetalle',
-                'method' => 'POST'
-            ]
-        ]
-    ]);
-    $routes->resources('Pages', [
-        'map' => [
-            'getAdmin' => [
-                'action' => 'getAdmin',
-                'method' => 'GET'
-            ],
-            'getPages/:type' => [
-                'action' => 'getPages',
-                'method' => 'GET'
-            ],
-            'upload/' => [
-                'action' => 'upload',
-                'method' => 'POST'
-            ]
-        ]
-    ]);
-    $routes->resources('Asesorias', [
-        'map' => [
-            'getAdmin' => [
-                'action' => 'getAdmin',
-                'method' => 'GET'
-            ],
-            'upload/' => [
-                'action' => 'upload',
-                'method' => 'POST'
-            ]
-        ]
-    ]);
+    ]);    
     $routes->resources('Roles', [
         'map' => [
             'getAdmin' => [
