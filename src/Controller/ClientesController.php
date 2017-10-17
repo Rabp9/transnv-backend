@@ -32,9 +32,7 @@ class ClientesController extends AppController
      *
      * @return \Cake\Network\Response|null
      */
-    public function getAdmin() {
-        $this->viewBuilder()->layout(false);
-        
+    public function getAdmin() {        
         $clientes = $this->Clientes->find();
                 
         $this->set(compact('clientes'));

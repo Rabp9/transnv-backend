@@ -25,8 +25,6 @@ class Controller extends Entity
      * @var array
      */
     protected $_accessible = [
-        'descripcion' => true,
-        'controller_name' => true,
-        'controller_roles' => true
+        '*' => true
     ];
 }

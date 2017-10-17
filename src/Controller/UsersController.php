@@ -20,13 +20,13 @@ class UsersController extends AppController
         parent::initialize();
         $this->Auth->allow(['token']);
     }
-    /**
-     * Index method
-     *
-     * @return \Cake\Network\Response|null
-     */
-    public function index() {
-        
+    
+    public function getAdmin() {        
+        $users = $this->Users->find()
+            ->contain(['Roles']);
+                
+        $this->set(compact('users'));
+        $this->set('_serialize', ['users']);
     }
     
     /**

@@ -28,41 +28,15 @@ class ControllersTable extends Table
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config)
-    {
+    public function initialize(array $config) {
         parent::initialize($config);
 
-        $this->setTable('controllers');
-        $this->setDisplayField('id');
-        $this->setPrimaryKey('id');
+        $this->table('controllers');
+        $this->displayField('id');
+        $this->primaryKey('id');
 
         $this->hasMany('ControllerRoles', [
             'foreignKey' => 'controller_id'
         ]);
-    }
-
-    /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
-    public function validationDefault(Validator $validator)
-    {
-        $validator
-            ->integer('id')
-            ->allowEmpty('id', 'create');
-
-        $validator
-            ->scalar('descripcion')
-            ->requirePresence('descripcion', 'create')
-            ->notEmpty('descripcion');
-
-        $validator
-            ->scalar('controller_name')
-            ->requirePresence('controller_name', 'create')
-            ->notEmpty('controller_name');
-
-        return $validator;
     }
 }

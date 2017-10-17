@@ -46,17 +46,15 @@ class InfosController extends AppController
         if ($this->request->is('post')) {
             $infos = $this->request->data;
             foreach ($infos as $data => $value) {
-                $info = $this->Infos->find()->where(['data' => $data])->first();
+                $info = $this->Infos->find()->where(['dato' => $data])->first();
                 $info->value = $value;
                 $this->Infos->save($info);
             }
         }
-        $message =  [
-            'text' => __('La información fue guardada correctamente'),
-            'type' => 'success',
-        ];
-        $this->set(compact('message'));
-        $this->set('_serialize', ['message']);
+        $code = 200;
+        $message = 'El cliente fue guardado correctamente';
+        $this->set(compact('message', 'code'));
+        $this->set('_serialize', ['message', 'code']);
     }
 
     /**
@@ -91,7 +89,7 @@ class InfosController extends AppController
         if ($this->request->is('post')) {
             foreach ($datas as $data) {
                 $value = $this->Infos->find()
-                    ->where(['data' => $data])
+                    ->where(['dato' => $data])
                     ->first()->value;
                 $info[$data] = $value;
             }
@@ -111,6 +109,29 @@ class InfosController extends AppController
         $this->set('_serialize', ['infos']);
     }
     
+    public function upload() { 
+        if ($this->request->is("post")) {
+            $imagen = $this->request->data["file"];
+            
+            $path_dst = WWW_ROOT . "img" . DS . "infos" . DS;
+            $ext = pathinfo($imagen['name'], PATHINFO_EXTENSION);
+            $filename = 'info-' . $this->Random->randomString() . '.' . $ext;
+           
+            $filename_src = $imagen["tmp_name"];
+            $file_src = new File($filename_src);
+
+            if ($file_src->copy($path_dst . $filename)) {
+                $code = 200;
+                $message = 'La imagen fue subida correctamente';
+            } else {
+                $message = "La imagen no fue subida con éxito";
+            }
+            
+            $this->set(compact("code", "message", "filename"));
+            $this->set("_serialize", ["message", "filename"]);
+        }
+    }
+    /*
     public function previewFondo() {
         $this->viewBuilder()->layout(false);
         
@@ -162,5 +183,6 @@ class InfosController extends AppController
         
         $this->set(compact('fondo', 'message', 'code'));
         $this->set('_serialize', ['fondo', 'message', 'code']);
-    }
+    }*/
+    
 }

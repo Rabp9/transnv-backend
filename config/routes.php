@@ -111,6 +111,10 @@ Router::scope('/', function ($routes) {
             'saveFondo' => [
                 'action' => 'saveFondo',
                 'method' => 'POST'
+            ],
+            'upload' => [
+                'action' => 'upload',
+                'method' => 'POST'
             ]
         ]
     ]);

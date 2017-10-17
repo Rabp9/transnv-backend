@@ -29,55 +29,21 @@ class ControllerRolesTable extends Table
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config)
-    {
+    public function initialize(array $config) {
         parent::initialize($config);
 
-        $this->setTable('controller_roles');
-        $this->setDisplayField('id');
-        $this->setPrimaryKey(['id', 'controller_id', 'rol_id']);
+        $this->table('controller_roles');
+        $this->entityClass('ControllerRol');
+        $this->displayField('permiso');
+        $this->primaryKey('id');
 
-        $this->belongsTo('Controllers', [
-            'foreignKey' => 'controller_id',
-            'joinType' => 'INNER'
-        ]);
         $this->belongsTo('Roles', [
             'foreignKey' => 'rol_id',
             'joinType' => 'INNER'
         ]);
-    }
-
-    /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
-    public function validationDefault(Validator $validator)
-    {
-        $validator
-            ->integer('id')
-            ->allowEmpty('id', 'create');
-
-        $validator
-            ->boolean('permiso')
-            ->allowEmpty('permiso');
-
-        return $validator;
-    }
-
-    /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
-     */
-    public function buildRules(RulesChecker $rules)
-    {
-        $rules->add($rules->existsIn(['controller_id'], 'Controllers'));
-        $rules->add($rules->existsIn(['rol_id'], 'Roles'));
-
-        return $rules;
+        $this->belongsTo('Controllers', [
+            'foreignKey' => 'controller_id',
+            'joinType' => 'INNER'
+        ]);
     }
 }

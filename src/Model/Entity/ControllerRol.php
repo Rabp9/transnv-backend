@@ -14,7 +14,7 @@ use Cake\ORM\Entity;
  * @property \App\Model\Entity\Controller $controller
  * @property \App\Model\Entity\Role $role
  */
-class ControllerRole extends Entity
+class ControllerRol extends Entity
 {
 
     /**
@@ -27,8 +27,6 @@ class ControllerRole extends Entity
      * @var array
      */
     protected $_accessible = [
-        'permiso' => true,
-        'controller' => true,
-        'role' => true
+        '*' => true
     ];
 }
