@@ -26,13 +26,13 @@ class ServiciosTable extends Table
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config)
-    {
+    public function initialize(array $config) {
         parent::initialize($config);
 
         $this->setTable('servicios');
-        $this->setDisplayField('id');
+        $this->setDisplayField('titulo');
         $this->setPrimaryKey('id');
+        $this->addBehavior('Burzum/Imagine.Imagine');
     }
 
     /**
@@ -41,8 +41,7 @@ class ServiciosTable extends Table
      * @param \Cake\Validation\Validator $validator Validator instance.
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator)
-    {
+    public function validationDefault(Validator $validator) {
         $validator
             ->integer('id')
             ->allowEmpty('id', 'create');
@@ -68,5 +67,39 @@ class ServiciosTable extends Table
             ->allowEmpty('portada');
 
         return $validator;
+    }
+    
+    public function afterSave($event, $entity, $options) {
+        $imageOperationsLarge = [
+            'thumbnail' => [
+                'height' => 800,
+                'width' => 800
+            ],
+        ];
+        $imageOperationsSmall = [
+            'thumbnail' => [
+                'height' => 400,
+                'width' => 400
+            ],
+        ];
+        
+        $path = WWW_ROOT . "img". DS . 'servicios' . DS;
+        
+        if ($entity->portada) {
+            $ext = pathinfo($entity->portada, PATHINFO_EXTENSION);
+            $filename_base = basename($entity->portada, '.' . $ext);
+            if (file_exists($path . $entity->portada)) {
+                $this->processImage($path . $entity->portada,
+                    $path . $filename_base . '_large.' . $ext,
+                    [],
+                    $imageOperationsLarge
+                );
+                $this->processImage($path . $entity->portada,
+                    $path . $filename_base . '_small.' . $ext,
+                    [],
+                    $imageOperationsSmall
+                );
+            }
+        }
     }
 }

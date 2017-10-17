@@ -8,9 +8,11 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property string $titulo
- * @property string $portada
+ * @property string $subtitulo
  * @property string $resumen
  * @property string $contenido
+ * @property string $portada
+ * @property int $estado_id
  */
 class Noticia extends Entity
 {
@@ -25,9 +27,6 @@ class Noticia extends Entity
      * @var array
      */
     protected $_accessible = [
-        'titulo' => true,
-        'portada' => true,
-        'resumen' => true,
-        'contenido' => true
+        '*' => true
     ];
 }

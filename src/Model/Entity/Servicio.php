@@ -12,6 +12,7 @@ use Cake\ORM\Entity;
  * @property string $resumen
  * @property string $contenido
  * @property string $portada
+ * @property int $estado_id
  */
 class Servicio extends Entity
 {
@@ -26,10 +27,6 @@ class Servicio extends Entity
      * @var array
      */
     protected $_accessible = [
-        'titulo' => true,
-        'subtitulo' => true,
-        'resumen' => true,
-        'contenido' => true,
-        'portada' => true
+        '*' => true
     ];
 }

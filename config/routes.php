@@ -114,33 +114,48 @@ Router::scope('/', function ($routes) {
             ]
         ]
     ]);
-
     $routes->resources('Clientes', [
         'map' => [
             'getAdmin' => [
                 'action' => 'getAdmin',
                 'method' => 'GET'
             ],
-            'getCiudades' => [
-                'action' => 'getCiudades',
-                'method' => 'GET'
-            ],
             'previewImagen' => [
                 'action' => 'previewImagen',
                 'method' => 'POST'
-            ],
-/*            'getRubros' => [
-                'action' => 'getRubros',
+            ]
+        ]
+    ]);
+    $routes->resources('Servicios', [
+        'map' => [
+            'getAdmin' => [
+                'action' => 'getAdmin',
                 'method' => 'GET'
             ],
-            'getClientesByCiudad/:ciudad' => [
-                'action' => 'getClientesByCiudad',
+            'previewPortada' => [
+                'action' => 'previewPortada',
+                'method' => 'POST'
+            ],
+            'upload' => [
+                'action' => 'upload',
+                'method' => 'POST'
+            ]
+        ]
+    ]);
+    $routes->resources('Noticias', [
+        'map' => [
+            'getAdmin' => [
+                'action' => 'getAdmin',
                 'method' => 'GET'
             ],
-            'getClientesByRubro/:rubro' => [
-                'action' => 'getClientesByRubro',
-                'method' => 'GET'
-            ]*/
+            'previewPortada' => [
+                'action' => 'previewPortada',
+                'method' => 'POST'
+            ],
+            'upload' => [
+                'action' => 'upload',
+                'method' => 'POST'
+            ]
         ]
     ]);    
     $routes->resources('Roles', [

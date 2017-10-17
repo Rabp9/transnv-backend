@@ -13,10 +13,6 @@ use Cake\Filesystem\File;
  */
 class ClientesController extends AppController
 {
-    public function initialize() {
-        parent::initialize();
-        $this->Auth->allow(['getRandom', 'index', 'view', 'download']);
-    }
 
     /**
      * Index method
@@ -101,23 +97,5 @@ class ClientesController extends AppController
             $this->set(compact("code", "message", "filename"));
             $this->set("_serialize", ["message", "filename"]);
         }
-    }
-    
-    public function remove() {
-        $cliente = $this->Clientes->get($this->request->getData('id'));
-        
-        if ($this->Servicios->delete($servicio)) {
-            $message = [
-                "type" => "success",
-                "text" => "El servicio fue eliminado con éxito"
-            ];
-        } else {
-            $message = [
-                "type" => "error",
-                "text" => "El servicio no fue eliminado con éxito",
-            ];
-        }
-        
-        $this->set(compact("message"));
     }
 }

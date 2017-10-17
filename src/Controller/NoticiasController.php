@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Filesystem\File;
 
 /**
  * Noticias Controller
@@ -12,100 +13,111 @@ use App\Controller\AppController;
  */
 class NoticiasController extends AppController
 {
-
+    
     /**
      * Index method
      *
-     * @return \Cake\Http\Response|void
+     * @return \Cake\Network\Response|null
      */
-    public function index()
-    {
-        $noticias = $this->paginate($this->Noticias);
-
+    public function index() {
+        $noticias = $this->Noticias->find()
+            ->where(['estado_id' => 1]);
+        
         $this->set(compact('noticias'));
         $this->set('_serialize', ['noticias']);
     }
-
+    
     /**
-     * View method
+     * Get Admin method
      *
-     * @param string|null $id Noticia id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @return \Cake\Network\Response|null
      */
-    public function view($id = null)
-    {
-        $noticia = $this->Noticias->get($id, [
-            'contain' => []
-        ]);
-
-        $this->set('noticia', $noticia);
-        $this->set('_serialize', ['noticia']);
+    public function getAdmin() {        
+        $noticias = $this->Noticias->find()
+            ->select(['id', 'titulo', 'subtitulo', 'estado_id']);
+                
+        $this->set(compact('noticias'));
+        $this->set('_serialize', ['noticias']);
     }
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $noticia = $this->Noticias->newEntity();
-        if ($this->request->is('post')) {
-            $noticia = $this->Noticias->patchEntity($noticia, $this->request->getData());
-            if ($this->Noticias->save($noticia)) {
-                $this->Flash->success(__('The noticia has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The noticia could not be saved. Please, try again.'));
-        }
-        $this->set(compact('noticia'));
-        $this->set('_serialize', ['noticia']);
-    }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id Noticia id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $noticia = $this->Noticias->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $noticia = $this->Noticias->patchEntity($noticia, $this->request->getData());
-            if ($this->Noticias->save($noticia)) {
-                $this->Flash->success(__('The noticia has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The noticia could not be saved. Please, try again.'));
-        }
-        $this->set(compact('noticia'));
-        $this->set('_serialize', ['noticia']);
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Noticia id.
-     * @return \Cake\Http\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
+    
+    public function view($id) {
         $noticia = $this->Noticias->get($id);
-        if ($this->Noticias->delete($noticia)) {
-            $this->Flash->success(__('The noticia has been deleted.'));
-        } else {
-            $this->Flash->error(__('The noticia could not be deleted. Please, try again.'));
+        
+        $this->set(compact('noticia'));
+        $this->set('_serialize', ['noticia']);
+    }
+    
+    public function add() {
+        $noticia = $this->Noticias->newEntity();
+        
+        if ($this->request->is('post')) {
+            $noticia = $this->Noticias->patchEntity($noticia, $this->request->data);
+            
+            if ($noticia->portada) {
+                $path_src = WWW_ROOT . "tmp" . DS;
+                $file_src = new File($path_src . $noticia->portada);
+             
+                $path_dst = WWW_ROOT . 'img' . DS . 'noticias' . DS;
+                $noticia->portada = $this->Random->randomFileName($path_dst, 'noticia-', $file_src->ext());
+                
+                $file_src->copy($path_dst . $noticia->portada);
+            }
+            
+            if ($this->Noticias->save($noticia)) {
+                $code = 200;
+                $message = 'El noticia fue guardado correctamente';
+            } else {
+                $message = 'El noticia no fue guardado correctamente';
+            }
         }
+        
+        $this->set(compact('noticia', 'message', 'code'));
+        $this->set('_serialize', ['noticia', 'message', 'code']);
+    }
+    
+    public function previewPortada() {
+        if ($this->request->is("post")) {
+            $portada = $this->request->data["file"];
+            
+            $path_dst = WWW_ROOT . "tmp" . DS;
+            $ext = pathinfo($portada['name'], PATHINFO_EXTENSION);
+            $filename = 'noticia-' . $this->Random->randomString() . '.' . $ext;
+           
+            $filename_src = $portada["tmp_name"];
+            $file_src = new File($filename_src);
 
-        return $this->redirect(['action' => 'index']);
+            if ($file_src->copy($path_dst . $filename)) {
+                $code = 200;
+                $message = 'La portada fue subida correctamente';
+            } else {
+                $message = "La portada no fue subida con éxito";
+            }
+            
+            $this->set(compact("code", "message", "filename"));
+            $this->set("_serialize", ["message", "filename"]);
+        }
+    }
+    
+    public function upload() { 
+        if ($this->request->is("post")) {
+            $imagen = $this->request->data["file"];
+            
+            $path_dst = WWW_ROOT . "img" . DS . "noticias" . DS . "pages" . DS;
+            $ext = pathinfo($imagen['name'], PATHINFO_EXTENSION);
+            $filename = 'noticia-' . $this->Random->randomString() . '.' . $ext;
+           
+            $filename_src = $imagen["tmp_name"];
+            $file_src = new File($filename_src);
+
+            if ($file_src->copy($path_dst . $filename)) {
+                $code = 200;
+                $message = 'La imagen fue subida correctamente';
+            } else {
+                $message = "La imagen no fue subida con éxito";
+            }
+            
+            $this->set(compact("code", "message", "filename"));
+            $this->set("_serialize", ["message", "filename"]);
+        }
     }
 }
