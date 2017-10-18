@@ -37,9 +37,7 @@ class UsersController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null) {
-        $user = $this->Users->get($id, [
-            'contain' => ['Personas']
-        ]);
+        $user = $this->Users->get($id);
 
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);

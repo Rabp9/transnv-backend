@@ -118,6 +118,22 @@ Router::scope('/', function ($routes) {
             ]
         ]
     ]);
+    $routes->resources('Slides', [
+        'map' => [
+            'previewImagen' => [
+                'action' => 'previewImagen',
+                'method' => 'POST'
+            ],
+            'getAdmin' => [
+                'action' => 'getAdmin',
+                'method' => 'GET'
+            ],
+            'saveMany' => [
+                'action' => 'saveMany',
+                'method' => 'POST'
+            ],
+        ]
+    ]);
     $routes->resources('Clientes', [
         'map' => [
             'getAdmin' => [

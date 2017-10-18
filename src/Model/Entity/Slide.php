@@ -22,6 +22,6 @@ class Slide extends Entity
      * @var array
      */
     protected $_accessible = [
-        'imagen' => true
+        '*' => true
     ];
 }
