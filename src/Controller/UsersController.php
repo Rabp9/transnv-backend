@@ -91,6 +91,27 @@ class UsersController extends AppController
     }
     
     /**
+     * Add method
+     *
+     * @return \Cake\Network\Response|null Redirects on successful add, renders view otherwise.
+     */
+    public function add() {
+        $user = $this->Users->newEntity();
+        
+        if ($this->request->is('post')) {
+            $user = $this->Users->patchEntity($user, $this->request->getData());
+            if ($this->Users->save($user)) {
+                $code = 200;
+                $message = 'El usuario fue guardado correctamente';
+            } else {
+                $message = 'El usuario no fue guardado correctamente';
+            }
+        }
+        $this->set(compact('user', 'message', 'code'));
+        $this->set('_serialize', ['user', 'message', 'code']);
+    }
+
+    /**
      * Login method
      *
      * @param string|null $id User id.
