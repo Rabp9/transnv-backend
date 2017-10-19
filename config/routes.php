@@ -146,6 +146,18 @@ Router::scope('/', function ($routes) {
             ]
         ]
     ]);
+    $routes->resources('Contactos', [
+        'map' => [
+            'getAdmin' => [
+                'action' => 'getAdmin',
+                'method' => 'GET'
+            ],
+            'previewImagen' => [
+                'action' => 'previewImagen',
+                'method' => 'POST'
+            ]
+        ]
+    ]);
     $routes->resources('Servicios', [
         'map' => [
             'getAdmin' => [
