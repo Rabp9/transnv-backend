@@ -104,16 +104,32 @@ Router::scope('/', function ($routes) {
                 'action' => 'getDataByData',
                 'method' => 'POST'
             ],
-            'previewFondo' => [
-                'action' => 'previewFondo',
-                'method' => 'POST'
-            ],
-            'saveFondo' => [
-                'action' => 'saveFondo',
-                'method' => 'POST'
-            ],
             'upload' => [
                 'action' => 'upload',
+                'method' => 'POST'
+            ]
+        ]
+    ]);
+    $routes->resources('Cabeceras', [
+        'map' => [
+            'saveMany' => [
+                'action' => 'saveMany',
+                'method' => 'POST'
+            ],
+            'getData/:data' => [
+                'action' => 'getData',
+                'method' => 'GET'
+            ],
+            'getDataMany' => [
+                'action' => 'getDataMany',
+                'method' => 'POST'
+            ],
+            'getDataByData' => [
+                'action' => 'getDataByData',
+                'method' => 'POST'
+            ],
+            'previewImagen' => [
+                'action' => 'previewImagen',
                 'method' => 'POST'
             ]
         ]

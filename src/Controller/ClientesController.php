@@ -74,7 +74,7 @@ class ClientesController extends AppController
         $this->set('_serialize', ['cliente', 'message', 'code']);
     }
     
-    public function previewImagen() {        
+    public function previewImagen() {
         if ($this->request->is("post")) {
             $imagen = $this->request->data["file"];
             
