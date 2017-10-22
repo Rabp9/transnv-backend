@@ -15,12 +15,12 @@ use Cake\ORM\TableRegistry;
  */
 class SlidesController extends AppController
 {
-    /*
+    
     public function initialize() {
         parent::initialize();
-        $this->Auth->allow(['index', 'getHeader', 'cleanImages']);
+        $this->Auth->allow(['index']);
     }
-    */
+    
     /**
      * Index method
      *
@@ -29,6 +29,7 @@ class SlidesController extends AppController
     public function index() {
         $slides = $this->Slides->find()
             ->where(['estado_id' => 1])
+            ->select(['id', 'imagen'])
             ->order(['orden' => 'ASC']);
                 
         $this->set(compact('slides'));
