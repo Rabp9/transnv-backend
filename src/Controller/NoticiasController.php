@@ -14,6 +14,11 @@ use Cake\Filesystem\File;
 class NoticiasController extends AppController
 {
     
+    public function initialize() {
+        parent::initialize();
+        $this->Auth->allow(['index']);
+    }
+    
     /**
      * Index method
      *
