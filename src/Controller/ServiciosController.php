@@ -13,6 +13,10 @@ use Cake\Filesystem\File;
  */
 class ServiciosController extends AppController
 {
+    public function initialize() {
+        parent::initialize();
+        $this->Auth->allow(['getSome']);
+    }
     
     /**
      * Index method
@@ -119,5 +123,22 @@ class ServiciosController extends AppController
             $this->set(compact("code", "message", "filename"));
             $this->set("_serialize", ["message", "filename"]);
         }
+    }
+    
+    /**
+     * Get Some method
+     *
+     * @return \Cake\Network\Response|null
+     */
+    public function getSome($amount = 0) {
+        $amount = $this->request->getParam('amount');
+        $servicios = $this->Servicios->find()
+            ->select(['id', 'titulo', 'resumen', 'portada'])
+            ->where(['estado_id' => 1])
+            ->order('rand()')
+            ->limit($amount);
+                
+        $this->set(compact('servicios'));
+        $this->set('_serialize', ['servicios']);
     }
 }
