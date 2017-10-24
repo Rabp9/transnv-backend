@@ -13,6 +13,10 @@ use Cake\Filesystem\File;
  */
 class ClientesController extends AppController
 {
+    public function initialize() {
+        parent::initialize();
+        $this->Auth->allow(['index']);
+    }
 
     /**
      * Index method
@@ -21,6 +25,7 @@ class ClientesController extends AppController
      */
     public function index() {
         $clientes = $this->Clientes->find()
+            ->select(['id', 'razon_social', 'imagen'])
             ->where(['estado_id' => 1]);
         
         $this->set(compact('clientes'));
