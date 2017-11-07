@@ -191,6 +191,10 @@ Router::scope('/', function ($routes) {
             'get_some/:amount' => [
                 'action' => 'getSome',
                 'method' => 'GET'
+            ],
+            'getIndex' => [
+                'action' => 'getIndex',
+                'method' => 'GET'
             ]
         ]
     ]);

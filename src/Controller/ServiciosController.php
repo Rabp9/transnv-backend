@@ -15,7 +15,7 @@ class ServiciosController extends AppController
 {
     public function initialize() {
         parent::initialize();
-        $this->Auth->allow(['getSome']);
+        $this->Auth->allow(['getSome', 'getIndex']);
     }
     
     /**
@@ -31,6 +31,14 @@ class ServiciosController extends AppController
         $this->set('_serialize', ['servicios']);
     }
     
+    public function getIndex() {
+        $servicios = $this->Servicios->find()
+            ->where(['estado_id' => 1])
+            ->limit(2);
+        
+        $this->set(compact('servicios'));
+        $this->set('_serialize', ['servicios']);
+    }
     /**
      * Get Admin method
      *
