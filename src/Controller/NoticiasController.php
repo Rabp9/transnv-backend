@@ -16,7 +16,7 @@ class NoticiasController extends AppController
     
     public function initialize() {
         parent::initialize();
-        $this->Auth->allow(['index']);
+        $this->Auth->allow(['getSome', 'index']);
     }
     
     /**
@@ -124,5 +124,22 @@ class NoticiasController extends AppController
             $this->set(compact("code", "message", "filename"));
             $this->set("_serialize", ["message", "filename"]);
         }
+    }
+    
+    /**
+     * Get Some method
+     *
+     * @return \Cake\Network\Response|null
+     */
+    public function getSome($amount = 0) {
+        $amount = $this->request->getParam('amount');
+        $noticias = $this->Noticias->find()
+            ->select(['id', 'titulo', 'resumen', 'portada'])
+            ->where(['estado_id' => 1])
+            ->order('rand()')
+            ->limit($amount);
+                
+        $this->set(compact('noticias'));
+        $this->set('_serialize', ['noticias']);
     }
 }

@@ -211,6 +211,10 @@ Router::scope('/', function ($routes) {
             'upload' => [
                 'action' => 'upload',
                 'method' => 'POST'
+            ],
+            'get_some/:amount' => [
+                'action' => 'getSome',
+                'method' => 'GET'
             ]
         ]
     ]);    
