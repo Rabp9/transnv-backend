@@ -15,7 +15,7 @@ class CabecerasController extends AppController
 {
     public function initialize() {
         parent::initialize();
-        $this->Auth->allow(['getDataMany', 'getData', 'getDataByData', 'add']);
+        $this->Auth->allow(['getDataMany', 'getData', 'getDataByData', 'add', 'getByDescripcion']);
     }
     /**
      * Add method
@@ -69,6 +69,14 @@ class CabecerasController extends AppController
         $this->set('_serialize', ['message', 'code']);
     }
 
+    public function getByDescripcion() {
+        $descripcion = $this->request->query('descripcion');
+        $cabecera = $this->Cabeceras->findByDescripcion($descripcion)->first();
+
+        $this->set(compact('cabecera'));
+        $this->set('_serialize', ['cabecera']);
+    }
+    
     /**
      * GetData method
      *

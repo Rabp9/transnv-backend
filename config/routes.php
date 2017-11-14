@@ -131,6 +131,10 @@ Router::scope('/', function ($routes) {
             'previewImagen' => [
                 'action' => 'previewImagen',
                 'method' => 'POST'
+            ],
+            'getByDescripcion' => [
+                'action' => 'getByDescripcion',
+                'method' => 'GET'
             ]
         ]
     ]);
