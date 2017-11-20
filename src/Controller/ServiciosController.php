@@ -15,7 +15,7 @@ class ServiciosController extends AppController
 {
     public function initialize() {
         parent::initialize();
-        $this->Auth->allow(['getSome', 'getIndex']);
+        $this->Auth->allow(['getSome', 'getIndex', 'view']);
     }
     
     /**
