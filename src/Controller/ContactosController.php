@@ -13,7 +13,10 @@ use Cake\Filesystem\File;
  */
 class ContactosController extends AppController
 {
-
+    public function initialize() {
+        parent::initialize();
+        $this->Auth->allow(['index']);
+    }
     /**
      * Index method
      *
