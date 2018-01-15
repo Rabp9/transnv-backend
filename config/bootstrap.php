@@ -67,9 +67,7 @@ if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
  * that changes from configuration that does not. This makes deployment simpler.
  */
 try {
-    // Configure::write('CAKEPHP_DEBUG', getenv('CAKEPHP_DEBUG'));
-    
-    Configure::write('CAKEPHP_DEBUG', 1);
+    Configure::write('CAKEPHP_DEBUG', getenv('CAKEPHP_DEBUG'));
     
     Configure::config('default', new PhpConfig());
     Configure::load('app', 'default', false);
@@ -79,7 +77,6 @@ try {
 } catch (\Exception $e) {
     exit($e->getMessage() . "\n");
 }
-
 /*
  * Load an environment local configuration file.
  * You can use a file like app_local.php to provide local overrides to your
