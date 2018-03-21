@@ -30,7 +30,7 @@ class InfosTable extends Table
         parent::initialize($config);
 
         $this->table('infos');
-        $this->displayField('id');
-        $this->primaryKey('dato');
+        $this->displayField('dato');
+        $this->primaryKey('id');
     }
 }
